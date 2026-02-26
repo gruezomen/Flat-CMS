@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "titulo": "Bienvenidos al Flat CMS",
+    "contenido": "Este es un CMS basado en archivos JSON.",
+    "fecha": "2026-02-26"
+  },
+  {
+    "id": 2,
+    "titulo": "Próximos eventos",
+    "contenido": "Mantente informado sobre las últimas novedades del sitio.",
+    "fecha": "2026-02-27"
+  }
+]

@@ -1,0 +1,9 @@
+/* Estilos para el componente VisionMision */
+.vision-box,
+.mision-box {
+  background-color: #800000; /* Color Guindo (Maroon) */
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  height: 100%;
+}
