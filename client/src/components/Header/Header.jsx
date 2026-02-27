@@ -21,8 +21,8 @@ const Header = () => {
     <header className="bg-dark text-white sticky-top">
       <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            Mi Sitio
+          <a className="navbar-brand fw-bold" href="/">
+            NotiSans
           </a>
           <button
             className="navbar-toggler"
