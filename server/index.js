@@ -8,6 +8,7 @@ const app = express();
 const port = 3001;
 const DATA_PATH = path.join(__dirname, 'data', 'noticias.json');
 const SECCIONES_PATH = path.join(__dirname, 'data', 'secciones.json');
+const CARRUSEL_PATH = path.join(__dirname, 'data', 'carrusel.json');
 
 // Configuración de almacenamiento para multer
 const storage = multer.diskStorage({
@@ -22,7 +23,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Endpoint para subir imágenes
@@ -64,6 +66,22 @@ app.post('/api/secciones', (req, res) => {
   fs.writeFile(SECCIONES_PATH, JSON.stringify(req.body, null, 2), (err) => {
     if (err) return res.status(500).json({ error: 'Error al guardar las secciones' });
     res.json({ message: 'Secciones actualizadas con éxito' });
+  });
+});
+
+// Leer carrusel
+app.get('/api/carrusel', (req, res) => {
+  fs.readFile(CARRUSEL_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Error al leer el carrusel' });
+    res.json(JSON.parse(data));
+  });
+});
+
+// Guardar carrusel
+app.post('/api/carrusel', (req, res) => {
+  fs.writeFile(CARRUSEL_PATH, JSON.stringify(req.body, null, 2), (err) => {
+    if (err) return res.status(500).json({ error: 'Error al guardar el carrusel' });
+    res.json({ message: 'Carrusel actualizado con éxito' });
   });
 });
 

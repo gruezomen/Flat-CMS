@@ -1,14 +1,16 @@
 [
   {
-    "id": 1,
+    "imagen": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png",
     "titulo": "Bienvenidos al Flat CMS",
+    "id": 1,
     "contenido": "Este es un CMS basado en archivos JSON.",
     "fecha": "2026-02-26"
   },
   {
-    "id": 2,
-    "titulo": "Próximos eventos",
-    "contenido": "Mantente informado sobre las últimas novedades del sitio.",
-    "fecha": "2026-02-27"
+    "id": 1772223668090,
+    "titulo": "PARQUE",
+    "contenido": "Umss Quillacollo",
+    "fecha": "2026-02-27",
+    "imagen": "https://www.umss.edu.bo/wp-content/uploads/2024/10/foto-playon-1.jpg"
   }
 ]

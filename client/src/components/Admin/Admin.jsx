@@ -5,6 +5,7 @@ import { API_URLS } from '../../api';
 const Admin = () => {
   const [noticias, setNoticias] = useState([]);
   const [secciones, setSecciones] = useState({ vision: '', mision: '', acercaDe: '' });
+  const [carrusel, setCarrusel] = useState([]);
 
   useEffect(() => {
     // Cargar noticias
@@ -16,6 +17,11 @@ const Admin = () => {
     fetch(API_URLS.secciones)
       .then(res => res.json())
       .then(data => setSecciones(data));
+
+    // Cargar carrusel
+    fetch(API_URLS.carrusel)
+      .then(res => res.json())
+      .then(data => setCarrusel(data));
   }, []);
 
   const handleSaveNoticias = () => {
@@ -38,11 +44,25 @@ const Admin = () => {
       .then(data => alert(data.message));
   };
 
+  const handleSaveCarrusel = () => {
+    fetch(API_URLS.carrusel, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(carrusel),
+    })
+      .then(res => res.json())
+      .then(data => alert(data.message));
+  };
+
   const handleEditNoticia = (id, campo, valor) => {
     setNoticias(noticias.map(n => n.id === id ? { ...n, [campo]: valor } : n));
   };
 
-  const handleImageUpload = (id, file) => {
+  const handleEditCarrusel = (id, campo, valor) => {
+    setCarrusel(carrusel.map(item => item.id === id ? { ...item, [campo]: valor } : item));
+  };
+
+  const handleImageUpload = (id, file, tipo = 'noticia') => {
     const formData = new FormData();
     formData.append('image', file);
 
@@ -53,7 +73,11 @@ const Admin = () => {
       .then(res => res.json())
       .then(data => {
         if (data.imageUrl) {
-          handleEditNoticia(id, 'imagen', data.imageUrl);
+          if (tipo === 'noticia') {
+            handleEditNoticia(id, 'imagen', data.imageUrl);
+          } else {
+            handleEditCarrusel(id, 'src', data.imageUrl);
+          }
         }
       })
       .catch(err => console.error('Error al subir imagen:', err));
@@ -64,8 +88,17 @@ const Admin = () => {
     setNoticias([...noticias, nueva]);
   };
 
+  const handleAddCarrusel = () => {
+    const nuevo = { id: Date.now(), src: '', alt: 'Nueva imagen del carrusel' };
+    setCarrusel([...carrusel, nuevo]);
+  };
+
   const handleDeleteNoticia = (id) => {
     setNoticias(noticias.filter(n => n.id !== id));
+  };
+
+  const handleDeleteCarrusel = (id) => {
+    setCarrusel(carrusel.filter(item => item.id !== id));
   };
 
   const handleEditSeccion = (campo, valor) => {
@@ -76,6 +109,7 @@ const Admin = () => {
     <div className="container mt-5 mb-5">
       <h1 className="text-center mb-4">Panel de Administración (Flat CMS)</h1>
       
+      {/* Secciones de Texto */}
       <div className="card p-4 mb-5 shadow-sm">
         <h3>Secciones de Texto Estático</h3>
         <div className="mb-3">
@@ -93,6 +127,30 @@ const Admin = () => {
         <button className="btn btn-primary" onClick={handleSaveSecciones}>Guardar Secciones</button>
       </div>
 
+      {/* Gestión del Carrusel */}
+      <div className="card p-4 mb-5 shadow-sm border-primary">
+        <h3>Gestión del Carrusel Principal</h3>
+        <button className="btn btn-success mb-3" onClick={handleAddCarrusel}>Añadir Imagen al Carrusel</button>
+        <div className="row">
+          {carrusel.map(item => (
+            <div key={item.id} className="col-md-6 mb-3">
+              <div className="border p-3 rounded bg-light">
+                <div className="input-group mb-2">
+                  <span className="input-group-text">URL</span>
+                  <input type="text" className="form-control" value={item.src} onChange={(e) => handleEditCarrusel(item.id, 'src', e.target.value)} placeholder="URL de la imagen" />
+                </div>
+                <input type="file" className="form-control mb-2" onChange={(e) => handleImageUpload(item.id, e.target.files[0], 'carrusel')} />
+                <input type="text" className="form-control mb-2" value={item.alt} onChange={(e) => handleEditCarrusel(item.id, 'alt', e.target.value)} placeholder="Descripción (alt)" />
+                {item.src && <img src={item.src} alt="Preview" className="img-thumbnail mb-2" style={{ height: '100px' }} />}
+                <button className="btn btn-danger btn-sm d-block w-100" onClick={() => handleDeleteCarrusel(item.id)}>Eliminar</button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <button className="btn btn-primary mt-2" onClick={handleSaveCarrusel}>Guardar Carrusel</button>
+      </div>
+
+      {/* Gestión de Noticias */}
       <div className="card p-4 shadow-sm">
         <h3>Gestión de Noticias</h3>
         <button className="btn btn-success mb-3" onClick={handleAddNoticia}>Nueva Noticia</button>
@@ -116,7 +174,7 @@ const Admin = () => {
                 <div className="text-center mb-1">
                   <small className="text-muted">O sube un archivo local:</small>
                 </div>
-                <input type="file" className="form-control mb-1" onChange={(e) => handleImageUpload(noticia.id, e.target.files[0])} />
+                <input type="file" className="form-control mb-1" onChange={(e) => handleImageUpload(noticia.id, e.target.files[0], 'noticia')} />
                 {noticia.imagen && (
                   <div className="mt-2 text-center">
                     <img src={noticia.imagen} alt="Preview" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '5px' }} />

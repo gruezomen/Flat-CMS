@@ -1,24 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Carousel.css';
+import { API_URLS } from '../../api';
 
 const Carousel = () => {
-  const images = [
-    {
-      src: 'https://via.placeholder.com/800x400/0000FF/FFFFFF?Text=Imagen+1',
-      alt: 'Primera imagen',
-    },
-    {
-      src: 'https://via.placeholder.com/800x400/FF0000/FFFFFF?Text=Imagen+2',
-      alt: 'Segunda imagen',
-    },
-    {
-      src: 'https://via.placeholder.com/800x400/00FF00/FFFFFF?Text=Imagen+3',
-      alt: 'Tercera imagen',
-    },
-  ];
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    fetch(API_URLS.carrusel)
+      .then(res => res.json())
+      .then(data => setImages(data))
+      .catch(err => console.error('Error al cargar carrusel:', err));
+  }, []);
+
+  if (images.length === 0) return <div className="p-5 text-center bg-light">Cargando carrusel...</div>;
 
   return (
-    <div id="imageCarousel" className="carousel slide" data-bs-ride="carousel">
+    <div id="imageCarousel" className="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
       <div className="carousel-indicators">
         {images.map((_, index) => (
           <button
