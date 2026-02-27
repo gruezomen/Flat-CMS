@@ -8,14 +8,13 @@ const Header = () => {
     setIsOpen(!isOpen);
   };
 
-  // The 'path' now corresponds to the ID of the section
   const navItems = [
-    { path: '#', name: 'Inicio' },
-    { path: '#acerca-de', name: 'Acerca de' },
-    { path: '#eventos', name: 'Eventos' },
-    { path: '#ubicacion', name: 'Ubicación' },
-    { path: '#noticias', name: 'Noticias' },
-    { path: '#vision-mision', name: 'Visión y Misión' },
+    { path: '/', name: 'Inicio' },
+    { path: '/#noticias', name: 'Noticias' },
+    { path: '/#eventos', name: 'Eventos' },
+    { path: '/#vision-mision', name: 'Visión y Misión' },
+    { path: '/#acerca-de', name: 'Acerca de' },
+    { path: '/#ubicacion', name: 'Ubicación' },
   ];
 
   return (

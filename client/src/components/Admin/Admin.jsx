@@ -6,6 +6,7 @@ const Admin = () => {
   const [noticias, setNoticias] = useState([]);
   const [secciones, setSecciones] = useState({ vision: '', mision: '', acercaDe: '' });
   const [carrusel, setCarrusel] = useState([]);
+  const [eventos, setEventos] = useState([]);
 
   useEffect(() => {
     // Cargar noticias
@@ -22,6 +23,11 @@ const Admin = () => {
     fetch(API_URLS.carrusel)
       .then(res => res.json())
       .then(data => setCarrusel(data));
+
+    // Cargar eventos
+    fetch(API_URLS.eventos)
+      .then(res => res.json())
+      .then(data => setEventos(data));
   }, []);
 
   const handleSaveNoticias = () => {
@@ -54,12 +60,26 @@ const Admin = () => {
       .then(data => alert(data.message));
   };
 
+  const handleSaveEventos = () => {
+    fetch(API_URLS.eventos, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(eventos),
+    })
+      .then(res => res.json())
+      .then(data => alert(data.message));
+  };
+
   const handleEditNoticia = (id, campo, valor) => {
     setNoticias(noticias.map(n => n.id === id ? { ...n, [campo]: valor } : n));
   };
 
   const handleEditCarrusel = (id, campo, valor) => {
     setCarrusel(carrusel.map(item => item.id === id ? { ...item, [campo]: valor } : item));
+  };
+
+  const handleEditEvento = (id, campo, valor) => {
+    setEventos(eventos.map(ev => ev.id === id ? { ...ev, [campo]: valor } : ev));
   };
 
   const handleImageUpload = (id, file, tipo = 'noticia') => {
@@ -93,12 +113,21 @@ const Admin = () => {
     setCarrusel([...carrusel, nuevo]);
   };
 
+  const handleAddEvento = () => {
+    const nuevo = { id: Date.now(), titulo: 'Nuevo Evento', fecha: new Date().toISOString().split('T')[0], descripcion: '' };
+    setEventos([...eventos, nuevo]);
+  };
+
   const handleDeleteNoticia = (id) => {
     setNoticias(noticias.filter(n => n.id !== id));
   };
 
   const handleDeleteCarrusel = (id) => {
     setCarrusel(carrusel.filter(item => item.id !== id));
+  };
+
+  const handleDeleteEvento = (id) => {
+    setEventos(eventos.filter(ev => ev.id !== id));
   };
 
   const handleEditSeccion = (campo, valor) => {
@@ -148,6 +177,23 @@ const Admin = () => {
           ))}
         </div>
         <button className="btn btn-primary mt-2" onClick={handleSaveCarrusel}>Guardar Carrusel</button>
+      </div>
+
+      {/* Gestión de Eventos */}
+      <div className="card p-4 mb-5 shadow-sm border-info">
+        <h3>Gestión de Próximos Eventos</h3>
+        <button className="btn btn-success mb-3" onClick={handleAddEvento}>Añadir Evento</button>
+        <div className="list-group">
+          {eventos.map(evento => (
+            <div key={evento.id} className="list-group-item border mb-2">
+              <input type="text" className="form-control mb-2 fw-bold" value={evento.titulo} onChange={(e) => handleEditEvento(evento.id, 'titulo', e.target.value)} placeholder="Nombre del Evento" />
+              <input type="date" className="form-control mb-2" value={evento.fecha} onChange={(e) => handleEditEvento(evento.id, 'fecha', e.target.value)} />
+              <textarea className="form-control mb-2" value={evento.descripcion} onChange={(e) => handleEditEvento(evento.id, 'descripcion', e.target.value)} placeholder="Descripción del evento" />
+              <button className="btn btn-danger btn-sm" onClick={() => handleDeleteEvento(evento.id)}>Eliminar Evento</button>
+            </div>
+          ))}
+        </div>
+        <button className="btn btn-primary mt-2" onClick={handleSaveEventos}>Guardar Eventos</button>
       </div>
 
       {/* Gestión de Noticias */}

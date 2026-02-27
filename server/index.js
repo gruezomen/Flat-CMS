@@ -9,6 +9,7 @@ const port = 3001;
 const DATA_PATH = path.join(__dirname, 'data', 'noticias.json');
 const SECCIONES_PATH = path.join(__dirname, 'data', 'secciones.json');
 const CARRUSEL_PATH = path.join(__dirname, 'data', 'carrusel.json');
+const EVENTOS_PATH = path.join(__dirname, 'data', 'eventos.json');
 
 // Configuración de almacenamiento para multer
 const storage = multer.diskStorage({
@@ -82,6 +83,22 @@ app.post('/api/carrusel', (req, res) => {
   fs.writeFile(CARRUSEL_PATH, JSON.stringify(req.body, null, 2), (err) => {
     if (err) return res.status(500).json({ error: 'Error al guardar el carrusel' });
     res.json({ message: 'Carrusel actualizado con éxito' });
+  });
+});
+
+// Leer eventos
+app.get('/api/eventos', (req, res) => {
+  fs.readFile(EVENTOS_PATH, 'utf8', (err, data) => {
+    if (err) return res.status(500).json({ error: 'Error al leer los eventos' });
+    res.json(JSON.parse(data));
+  });
+});
+
+// Guardar eventos
+app.post('/api/eventos', (req, res) => {
+  fs.writeFile(EVENTOS_PATH, JSON.stringify(req.body, null, 2), (err) => {
+    if (err) return res.status(500).json({ error: 'Error al guardar los eventos' });
+    res.json({ message: 'Eventos actualizados con éxito' });
   });
 });
 

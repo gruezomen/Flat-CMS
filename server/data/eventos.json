@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "titulo": "Feria de Ciencias",
+    "fecha": "2026-03-15",
+    "descripcion": "Presentación de proyectos científicos de los estudiantes."
+  },
+  {
+    "id": 2,
+    "titulo": "Reunión de Padres",
+    "fecha": "2026-03-20",
+    "descripcion": "Entrega de informes y discusión del progreso académico."
+  }
+]

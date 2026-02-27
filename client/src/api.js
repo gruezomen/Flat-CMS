@@ -6,6 +6,7 @@ export const API_URLS = {
   noticias: `${API_BASE_URL}/api/noticias`,
   secciones: `${API_BASE_URL}/api/secciones`,
   carrusel: `${API_BASE_URL}/api/carrusel`,
+  eventos: `${API_BASE_URL}/api/eventos`,
   upload: `${API_BASE_URL}/api/upload`,
 };
 
