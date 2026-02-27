@@ -30,12 +30,10 @@ const Home = () => (
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/admin" element={<Admin />} />
+    </Routes>
   );
 }
 
