@@ -103,8 +103,25 @@ const Admin = () => {
               <textarea className="form-control mb-2" value={noticia.contenido} onChange={(e) => handleEditNoticia(noticia.id, 'contenido', e.target.value)} placeholder="Contenido" rows="3" />
               <div className="mb-2">
                 <label className="form-label">Imagen de la noticia</label>
+                <div className="input-group mb-1">
+                  <span className="input-group-text">URL</span>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="https://ejemplo.com/imagen.jpg" 
+                    value={noticia.imagen || ''} 
+                    onChange={(e) => handleEditNoticia(noticia.id, 'imagen', e.target.value)} 
+                  />
+                </div>
+                <div className="text-center mb-1">
+                  <small className="text-muted">O sube un archivo local:</small>
+                </div>
                 <input type="file" className="form-control mb-1" onChange={(e) => handleImageUpload(noticia.id, e.target.files[0])} />
-                {noticia.imagen && <img src={noticia.imagen} alt="Preview" style={{ width: '100px', height: 'auto', display: 'block' }} />}
+                {noticia.imagen && (
+                  <div className="mt-2 text-center">
+                    <img src={noticia.imagen} alt="Preview" style={{ maxWidth: '100%', maxHeight: '150px', borderRadius: '5px' }} />
+                  </div>
+                )}
               </div>
               <input type="date" className="form-control mb-2" value={noticia.fecha} onChange={(e) => handleEditNoticia(noticia.id, 'fecha', e.target.value)} />
               <button className="btn btn-danger btn-sm" onClick={() => handleDeleteNoticia(noticia.id)}>Eliminar Noticia</button>
