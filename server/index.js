@@ -5,7 +5,7 @@ const path = require('path');
 const multer = require('multer');
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 const DATA_PATH = path.join(__dirname, 'data', 'noticias.json');
 const SECCIONES_PATH = path.join(__dirname, 'data', 'secciones.json');
 const CARRUSEL_PATH = path.join(__dirname, 'data', 'carrusel.json');

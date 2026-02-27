@@ -1,6 +1,7 @@
-// Detectamos la IP actual desde la que se accede al sitio
 const host = window.location.hostname;
-const API_BASE_URL = `http://${host}:3001`;
+let API_BASE_URL = `http://${host}:3001`;
+
+API_BASE_URL = 'https://flat-cms.onrender.com';
 
 export const API_URLS = {
   noticias: `${API_BASE_URL}/api/noticias`,
