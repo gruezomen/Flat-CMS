@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './AcercaDe.css';
+import { API_URLS } from '../../api';
 
 const AcercaDe = () => {
   const [data, setData] = useState({ acercaDe: '' });
 
   useEffect(() => {
-    fetch('http://192.168.1.14:3001/api/secciones')
+    fetch(API_URLS.secciones)
       .then(res => res.json())
       .then(d => setData(d))
       .catch(err => console.error(err));

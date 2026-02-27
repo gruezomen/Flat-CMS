@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Admin.css';
+import { API_URLS } from '../../api';
 
 const Admin = () => {
   const [noticias, setNoticias] = useState([]);
@@ -7,18 +8,18 @@ const Admin = () => {
 
   useEffect(() => {
     // Cargar noticias
-    fetch('http://192.168.1.14:3001/api/noticias')
+    fetch(API_URLS.noticias)
       .then(res => res.json())
       .then(data => setNoticias(data));
 
     // Cargar secciones
-    fetch('http://192.168.1.14:3001/api/secciones')
+    fetch(API_URLS.secciones)
       .then(res => res.json())
       .then(data => setSecciones(data));
   }, []);
 
   const handleSaveNoticias = () => {
-    fetch('http://192.168.1.14:3001/api/noticias', {
+    fetch(API_URLS.noticias, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(noticias),
@@ -28,7 +29,7 @@ const Admin = () => {
   };
 
   const handleSaveSecciones = () => {
-    fetch('http://192.168.1.14:3001/api/secciones', {
+    fetch(API_URLS.secciones, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(secciones),
@@ -41,8 +42,25 @@ const Admin = () => {
     setNoticias(noticias.map(n => n.id === id ? { ...n, [campo]: valor } : n));
   };
 
+  const handleImageUpload = (id, file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    fetch(API_URLS.upload, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.imageUrl) {
+          handleEditNoticia(id, 'imagen', data.imageUrl);
+        }
+      })
+      .catch(err => console.error('Error al subir imagen:', err));
+  };
+
   const handleAddNoticia = () => {
-    const nueva = { id: Date.now(), titulo: 'Nueva Noticia', contenido: '', fecha: new Date().toISOString().split('T')[0] };
+    const nueva = { id: Date.now(), titulo: 'Nueva Noticia', contenido: '', fecha: new Date().toISOString().split('T')[0], imagen: '' };
     setNoticias([...noticias, nueva]);
   };
 
@@ -83,6 +101,11 @@ const Admin = () => {
             <div key={noticia.id} className="list-group-item border mb-2">
               <input type="text" className="form-control mb-2 fw-bold" value={noticia.titulo} onChange={(e) => handleEditNoticia(noticia.id, 'titulo', e.target.value)} placeholder="Título" />
               <textarea className="form-control mb-2" value={noticia.contenido} onChange={(e) => handleEditNoticia(noticia.id, 'contenido', e.target.value)} placeholder="Contenido" rows="3" />
+              <div className="mb-2">
+                <label className="form-label">Imagen de la noticia</label>
+                <input type="file" className="form-control mb-1" onChange={(e) => handleImageUpload(noticia.id, e.target.files[0])} />
+                {noticia.imagen && <img src={noticia.imagen} alt="Preview" style={{ width: '100px', height: 'auto', display: 'block' }} />}
+              </div>
               <input type="date" className="form-control mb-2" value={noticia.fecha} onChange={(e) => handleEditNoticia(noticia.id, 'fecha', e.target.value)} />
               <button className="btn btn-danger btn-sm" onClick={() => handleDeleteNoticia(noticia.id)}>Eliminar Noticia</button>
             </div>

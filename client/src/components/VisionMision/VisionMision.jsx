@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './VisionMision.css';
+import { API_URLS } from '../../api';
 
 const VisionMision = () => {
   const [data, setData] = useState({ vision: '', mision: '' });
 
   useEffect(() => {
-    fetch('http://192.168.1.14:3001/api/secciones')
+    fetch(API_URLS.secciones)
       .then(res => res.json())
       .then(d => setData(d))
       .catch(err => console.error(err));
